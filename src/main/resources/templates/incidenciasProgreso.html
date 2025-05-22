@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{incidenciasProgreso.tituloPagina}">Incidencias en Progreso</title>
+    <link rel="icon" href="/img/logo_RG_180_mono_new_nohalo.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header th:insert="~{fragments/header :: header}"></header>
+    <nav th:insert="~{fragments/navigation :: nav}"
+        class="navbar navbar-expand-lg border-top border-bottom py-4 bg-body-secondary fw-bolder"></nav>
+
+    <!-- Mostrar alerta de confirmación para la asignacion de incidencia si existe -->
+    <div th:if="${confirmacion != null}"
+        class="alert alert-success mt-3 w-50 mx-auto text-center p-4 rounded shadow d-flex align-items-center"
+        role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+        <span th:text="${confirmacion}" class="fs-5"></span>
+    </div>
+
+    <!-- Mostrar alerta de confirmación si existe -->
+    <div th:if="${mensajeNoProgreso != null}"
+        class="alert alert-warning mt-3 w-50 mx-auto text-center p-4 rounded shadow d-flex align-items-center"
+        role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+        <span th:text="${mensajeNoProgreso}" class="fs-5"></span>
+    </div>
+
+    <!-- Tabla de incidencias en reparacion -->
+
+    <!-- Mostrar tabla solo si no existe mensaje -->
+    <div th:if="${mensajeNoProgreso == null}" class="table-responsive mx-auto w-75 mt-3">
+        <h3 class="text-center mb-3" th:text="#{incidenciasProgreso.listado}">Listado de incidencias en progreso</h3>
+
+        <!-- Buscador -->
+        <div class="container w-50">
+            <form class="d-flex" role="search" th:action="@{/incidencias/incidenciasProgreso/buscar}" th:object="${search}" method="post">
+                <input th:field="*{titulo}" class="form-control me-2" type="text" th:placeholder="#{incidenciasProgreso.buscar.placeholder}" aria-label="Buscar">
+                <select th:field="*{usuario.id}" id="" class="form-select me-2 w-50" >
+                    <option th:value="${null}" selected th:text="#{incidenciasProgreso.seleccioneUsuario}">Seleccione un usuario</option>
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}"
+                        th:text="${usuario.nombre} + ' ' + ${usuario.apellido1}"></option>
+                </select>
+                <button class="btn btn-outline-success " type="submit" th:text="#{incidenciasProgreso.buscar.boton}">Buscar</button>
+            </form>
+        </div>
+
+        <!-- Modal que aparece (el codigo puede estar en cualquier sitio) -->
+        <div id="modal-imagen" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- IMAGEN -->
+                    <div class="modal-body">
+
+                    </div>
+                    <!-- CONTENIDO -->
+                    <h3 id="tittleModal" class="px-4 " th:text="#{incidenciasProgreso.modal.titulo}"></h3>
+                    <p id="descripcionModal" class="px-4" th:text="#{incidenciasProgreso.modal.descripcion}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <table class="table table-striped mt-3 table-custom">
+            <thead class="table-success">
+                <tr>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.identificador}">Identificador</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.titulo}">Título</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.aula}">Aula</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.fecha}">Fecha</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.imagen}">Imagen</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.encargado}">Encargado</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.estado}">Estado</th>
+                    <th scope="col" th:text="#{incidenciasProgreso.tabla.acciones}">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="align-middle" th:each="incidencia : ${incidenciasProgreso}">
+                    <td th:text="${incidencia.id}" class="text-center"></td>
+                    <td th:text="${incidencia.titulo}"></td>
+                    <td th:text="${incidencia.aula}"></td>
+                    <td th:text="${#temporals.format(incidencia.fecha, 'dd/MM/yyyy')}"></td>
+                    <td>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-imagen"
+                            th:attr="data-bs-imagen=${incidencia.imagen}, data-bs-descripcion=${incidencia.descripcion}">
+                            <img th:src="@{${incidencia.imagen}}" class="img-fluid img-custom-s"
+                                th:alt="#{incidenciasProgreso.tabla.imagen.alt}" />
+                        </a>
+                    </td>
+
+                    <!-- Si el usuario es null, muestra 'Sin asignar' -->
+                    <td th:if="${incidencia.usuario != null}" th:text="${incidencia.usuario.nombre + ' ' + incidencia.usuario.apellido1}"></td>
+                    <td th:unless="${incidencia.usuario != null}" th:text="#{incidenciasProgreso.sinAsignar}"></td>
+
+
+                    <td th:text="${incidencia.estado}"></td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-warning btn-sm" sec:authorize="hasRole('ADMIN')"
+                                th:href="@{/admin/editarIncidencia/{id}(id=${incidencia.id})}" th:text="#{incidenciasProgreso.boton.editar}">Editar</a>
+                            <a class="btn btn-danger btn-sm confirmar" sec:authorize="hasRole('ADMIN')"
+                                th:href="@{/admin/eliminarIncidencia/{id}(id=${incidencia.id})}" th:text="#{incidenciasProgreso.boton.eliminar}">Eliminar</a>
+                            <!-- Mostrar solo si el usuario actual es el asignado a la incidencia -->
+                            <a class="btn btn-success btn-sm" th:if="${incidencia.usuario != null && incidencia.usuario.id == currentUser.id}"
+                                th:href="@{/incidencias/incidencia/desasignar/{id} (id=${incidencia.id})}" th:text="#{incidenciasProgreso.boton.desasignar}">Desasignar</a>
+                            <!-- Mostrar solo si el usuario actual es el asignado a la incidencia -->
+                            <a class="btn btn-success btn-sm" th:if="${incidencia.usuario != null && incidencia.usuario.id == currentUser.id}"
+                                th:href="@{/incidencias/incidencia/resolver/{id} (id=${incidencia.id})}" th:text="#{incidenciasProgreso.boton.finalizar}">Finalizar</a>
+                            <!-- Mostrar Notas -->
+                            <a class="btn btn-primary btn-sm"  
+                                th:href="@{/incidencias/incidencia/crearNota/{id} (id=${incidencia.id})}" th:text="#{incidenciasProgreso.boton.notas}">Notas</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:insert="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/app-modal.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

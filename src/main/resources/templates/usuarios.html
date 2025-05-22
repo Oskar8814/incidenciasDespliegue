@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{usuarios.tituloPagina}">Listado de Usuarios</title>
+    <link rel="icon" href="/img/logo_RG_180_mono_new_nohalo.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}">
+    <link rel="stylesheet"
+        th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header th:insert="~{fragments/header :: header}"></header>
+    <nav th:insert="~{fragments/navigation :: nav}"
+        class="navbar navbar-expand-lg border-top border-bottom py-4 bg-body-secondary fw-bolder"></nav>
+    <!-- CARROUSEL -->
+    <section>
+        <div id="my-carousel" class="carousel slide" data-bs-ride="carousel">
+
+            <!-- Indicadores -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#my-carousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#my-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#my-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#my-carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+
+            <!-- Carrusel principal -->
+            <div class="carousel-inner">
+                <div class="carousel-item active ">
+                    <img class="d-block w-100"
+                        src="https://res.cloudinary.com/dakrekb58/image/upload/v1741031394/technology-7978107_960_720_fr7yfi.jpg"
+                        alt="Foto 1">
+                </div>
+                <div class="carousel-item ">
+                    <img class="d-block w-100"
+                        src="https://res.cloudinary.com/dakrekb58/image/upload/v1741031385/server-7239721_960_720_a4hnr6.jpg"
+                        alt="Foto 2">
+                </div>
+                <div class="carousel-item ">
+                    <img class="d-block w-100"
+                        src="https://res.cloudinary.com/dakrekb58/image/upload/v1740860500/carrousel2_vf9bw3.jpg"
+                        alt="Foto 3">
+                </div>
+                <div class="carousel-item ">
+                    <img class="d-block w-100"
+                        src="https://res.cloudinary.com/dakrekb58/image/upload/v1741032020/reparacion_fixklg.jpg"
+                        alt="Foto 4">
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#my-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden" th:text="#{usuarios.anterior}">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#my-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden" th:text="#{usuarios.siguiente}">Siguiente</span>
+            </button>
+
+        </div>
+    </section>
+
+    <!-- Mostrar alerta de confirmación para el guardado de usuario si existe -->
+    <div th:if="${confirmacion != null}"
+        class="alert alert-success mt-3 w-50 mx-auto text-center p-4 rounded shadow d-flex align-items-center"
+        role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+        <span th:text="${confirmacion}" class="fs-5"></span>
+    </div>
+
+    <!-- Mostrar alerta de confirmación si existe -->
+    <div th:if="${mensajeNoUsuarios != null}"
+        class="alert alert-warning mt-3 w-50 mx-auto text-center p-4 rounded shadow d-flex align-items-center"
+        role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+        <span th:text="${mensajeNoUsuarios}" class="fs-5"></span>
+    </div>
+
+    <!-- Mostrar alerta de confirmación para la asignacion de incidencia si existe -->
+    <div th:if="${mensajeError != null}"
+        class="alert alert-success mt-3 w-50 mx-auto text-center p-4 rounded shadow d-flex align-items-center"
+        role="alert">
+        <i class="bi bi-check-circle-fill me-2 fs-3"></i>
+        <span th:text="${mensajeError}" class="fs-5"></span>
+    </div>
+
+    <!-- Tabla de usuarios -->
+
+    <!-- Mostrar tabla solo si no existe mensaje -->
+    <div th:if="${mensajeNoUsuarios == null}" class="table-responsive mx-auto w-75 mt-3">
+        <h3 class="text-center mb-3" th:text="#{usuarios.listado}">Listado de Usuarios</h3>
+
+        <!-- Buscador -->
+        <div class="container w-50">
+            <form class="d-flex" role="search" th:action="@{/usuario/buscar}" th:object="${search}" method="post">
+                <input th:field="*{nombre}" class="form-control me-2" type="text" th:placeholder="#{usuarios.buscar.placeholder}" aria-label="Buscar">
+                <button class="btn btn-outline-success" type="submit" th:text="#{usuarios.buscar.boton}">Buscar</button>
+            </form>
+        </div>
+
+        <!-- Tabla -->
+        <table class="table table-striped mt-3 table-custom">
+            <thead class="table-success">
+                <tr>
+                    <th scope="col" th:text="#{usuarios.tabla.identificador}">Identificador</th>
+                    <th scope="col" th:text="#{usuarios.tabla.nombre}">Nombre</th>
+                    <th scope="col" th:text="#{usuarios.tabla.apellidos}">Apellidos</th>
+                    <th scope="col" th:text="#{usuarios.tabla.correo}">Correo</th>
+                    <th scope="col" th:text="#{usuarios.tabla.perfil}">Perfil</th>
+                    <th scope="col" th:text="#{usuarios.tabla.acciones}">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="align-middle" th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.id}" class="text-center"></td>
+                    <td th:text="${usuario.nombre}"></td>
+                    <td th:text="|${usuario.apellido1} ${usuario.apellido2}|"></td>
+                    <td th:text="${usuario.mail}"></td>
+                    <td th:text="${usuario.rol.name}"></td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-warning btn-sm"  th:href="@{/usuario/edit/{id} (id=${usuario.id})} " th:text="#{usuarios.boton.editar}">Editar</a>
+                            <a class="btn btn-danger btn-sm confirmarDeleteUsuario" 
+                                th:href="@{/usuario/delete/{id} (id=${usuario.id})} " th:text="#{usuarios.boton.eliminar}">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:insert="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/app-modal.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>
