@@ -1,0 +1,9 @@
+ies.ruizgijon.gestorincidencias
+ies.ruizgijon.gestorincidencias.config
+ies.ruizgijon.gestorincidencias.controller
+ies.ruizgijon.gestorincidencias.exceptions
+ies.ruizgijon.gestorincidencias.model
+ies.ruizgijon.gestorincidencias.repository
+ies.ruizgijon.gestorincidencias.security
+ies.ruizgijon.gestorincidencias.service
+ies.ruizgijon.gestorincidencias.util

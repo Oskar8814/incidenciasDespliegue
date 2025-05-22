@@ -1,0 +1,26 @@
+
+/* Variable (custom properties) */
+:root{
+    --bs-blue:#037bc0;
+    --bs-green: #8cbc00;
+    --bs-grey: #343a40;
+    --green-hover:#769c02;
+}
+.carousel-inner img {
+    height: 600px; /* Ajusta la altura según necesites */
+    object-fit: cover; /*Recorta la imagen si es necesario */
+}
+
+.img-custom-s{
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /*Recorta la imagen si es necesario */
+}
+.img-custom-m{
+    width: 500px;
+    height: 500px;
+    object-fit: cover; /*Recorta la imagen si es necesario */
+}
+.text-amarillo{
+    color: #fab443;
+}

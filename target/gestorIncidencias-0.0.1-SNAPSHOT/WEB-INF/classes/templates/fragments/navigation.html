@@ -1,0 +1,56 @@
+<!-- NAVEGADOR -->
+<div th:fragment="nav" class="container-fluid">
+    <a class="navbar-brand text-primary fs-2 fw-bold text-uppercase d-lg-none" th:href="@{/incidenciasPendientes}"><img
+            th:src="@{/img/logo_RG_480_azul.png}" class="img-fluid w-25" alt="Logo IES Ruiz Gijon"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav container-lg justify-content-around">
+            <a class="nav-link" aria-current="page" th:href="@{/incidencias/index}" th:text="#{nav.inicio}">Inicio</a>
+            <!--  -->
+            <a class="nav-link" th:href="@{/incidencias/crearIncidencia}" th:text="#{nav.nuevaIncidencia}">Nueva incidencia</a>
+            <!--  -->
+            <a class="nav-link" th:href="@{/incidencias/incidenciasProgreso}" th:text="#{nav.incidenciasProgreso}">Incidencias en progreso</a>
+            <!--  -->
+            <a class="nav-link" th:href="@{/incidencias/incidenciasResueltas}" th:text="#{nav.incidenciasResueltas}">Incidencias resueltas</a>
+
+            <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" th:text="#{nav.usuario}">Usuario</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" th:href="@{/usuario/listar}" th:text="#{nav.usuario.listado}">Listado de Usuarios</a></li>
+                    <li><a class="dropdown-item" th:href="@{/usuario/crear}" th:text="#{nav.usuario.nuevo}">Nuevo Usuario</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" th:text="#{nav.perfil}">Perfil</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a th:href="@{/modificarContrasena}" class="dropdown-item" th:text="#{nav.perfil.modificarContrasena}">Modificar contraseña</a></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit" th:text="#{nav.perfil.cerrarSesion}">Cerrar sesión</button>
+                        </form>
+                    </li>
+                    
+                    <li class="dropdown-submenu">
+                        <div class="dropdown-item"  th:text="#{nav.perfil.idioma}">Idioma</div>
+                        <div class="d-flex gap-2 px-2">
+                            <a th:href="@{${currentUrl}(lang='es')}" class="btn btn-sm btn-light border" title="Español">
+                                <img th:src="@{/img/es.svg}" alt="ES" class="me-1" width="20" height="20"> ES
+                            </a>
+                            <a th:href="@{${currentUrl}(lang='en')}" class="btn btn-sm btn-light border" title="English">
+                                <img th:src="@{/img/gb.svg}" alt="EN" class="me-1" width="20" height="20"> EN
+                            </a>
+                        </div>
+                    </li>
+
+                    
+                </ul>
+            </li>
+
+        </div>
+    </div>
+</div>

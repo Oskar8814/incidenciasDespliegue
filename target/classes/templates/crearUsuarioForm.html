@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{crearUsuarioForm.tituloPagina}">Formulario de usuario</title>
+    <link rel="icon" href="/img/logo_RG_180_mono_new_nohalo.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/css/formIncidencia.css}">
+</head>
+
+<body>
+    <div class="container-lg">
+        <div class="row justify-content-center align-items-center mt-3">
+            <div class="col-md-8">
+
+                <h1 class="text-center my-3 p-2 bg-body-secondary rounded opacity-75" th:text="#{crearUsuarioForm.titulo}">Formulario de Usuario</h1>
+                <!-- Formulario  -->
+                <form th:action="@{/usuario/save}" class=" bg-white p-3 rounded needs-validation" th:object="${usuario}" method="post" novalidate>
+
+                    <div>
+                        <a th:href="@{/incidencias/index}" class="d-flex justify-content-center">
+                            <img th:src="@{/img/logo_RG_formularios.png}" class="img-fluid w-50" th:alt="#{crearUsuarioForm.logoAlt}">
+                        </a>
+                    </div>
+                    <!-- nombre y apellidos-->
+                    <div class="mt-3">
+                        <!-- ID -->
+                        <input type="hidden" th:field="*{id}">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-nombre" th:text="#{crearUsuarioForm.nombre}">Nombre</label>
+                                <input class="form-control" type="text" id="input-nombre" th:field="*{nombre}" th:placeholder="#{crearUsuarioForm.nombrePlaceholder}" maxlength="50" required />
+                                <div class="valid-feedback" th:text="#{crearUsuarioForm.campoValido}">Campo valido</div>
+                                <div class="invalid-feedback" th:text="#{crearUsuarioForm.completarNombre}">Debes completar el Nombre</div>
+                            </div>
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-Apellido1" th:text="#{crearUsuarioForm.apellido1}">Primer apellido</label>
+                                <input class="form-control" type="text" id="input-Apellido1" th:field="*{apellido1}" th:placeholder="#{crearUsuarioForm.apellido1Placeholder}" maxlength="50" required>
+                                <div class="valid-feedback" th:text="#{crearUsuarioForm.campoValido}">Campo valido</div>
+                                <div class="invalid-feedback" th:text="#{crearUsuarioForm.completarApellido1}">Debes completar el primer Apellido</div>
+                            </div>
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-Apellido2" th:text="#{crearUsuarioForm.apellido2}">Segundo apellido</label>
+                                <input class="form-control" type="text" id="input-Apellido2" th:field="*{apellido2}" th:placeholder="#{crearUsuarioForm.apellido2Placeholder}" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- mail -->
+                    <div class="mt-3">
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-mail" th:text="#{crearUsuarioForm.mail}">Correo del Usuario</label>
+                                <input type="email" class="form-control" th:placeholder="#{crearUsuarioForm.mailPlaceholder}" id="input-mail" th:field="*{mail}" maxlength="100" required>
+                                <div class="valid-feedback" th:text="#{crearUsuarioForm.campoValido}">Campo valido</div>
+                                <div class="invalid-feedback" th:text="#{crearUsuarioForm.completarMail}">Debes completar el Correo del usuario</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="mt-3">
+                        <label for="formFile" class="form-label ms-3 mt-2" th:text="#{crearUsuarioForm.password}">Contraseña</label>
+                        <input class="form-control" type="password" id="contraseña" th:field="*{password}" th:placeholder="#{crearUsuarioForm.passwordPlaceholder}" maxlength="255" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,16}$" required>
+                        <div class="valid-feedback" th:text="#{crearUsuarioForm.campoValido}">Campo valido</div>
+                        <div class="invalid-feedback" th:text="#{crearUsuarioForm.completarPassword}">Debes añadir la Contraseña</div>
+                    </div>
+
+                    <!-- Rol del usuario -->
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="select-creador" th:text="#{crearUsuarioForm.rol}">Rol del Usuario</label>
+                                <select class="form-select" id="select-rol" th:field="*{rol}" required>
+                                    <option class="is-invalid" value="" disabled selected th:text="#{crearUsuarioForm.seleccioneRol}">Seleccione un Perfil</option>
+                                    <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button class="btn btn-outline-success" type="submit" th:text="#{crearUsuarioForm.enviar}">Enviar<i class="bi bi-check ms-2"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{js/bs5-validation.js}"></script>
+    <script th:src="@{js/bootstrap.bundle.js}"></script>
+</body>
+
+</html>

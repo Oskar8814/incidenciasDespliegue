@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{crearIncidenciaForm.tituloPagina}">Formulario de incidencias</title>
+    <link rel="icon" href="/img/logo_RG_180_mono_new_nohalo.ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/css/formIncidencia.css}">
+</head>
+
+<body>
+    <div class="container-lg">
+        <div class="row justify-content-center align-items-center mt-3">
+            <div class="col-md-8">
+
+                <h1 class="text-center my-3 p-2 bg-body-secondary rounded opacity-75" th:text="#{crearIncidenciaForm.titulo}">Formulario de Incidencias</h1>
+                <!-- Formulario  -->
+                <form th:action="@{/incidencias/creaIncidencia/save}" class=" bg-white p-3 rounded needs-validation" th:object="${incidencia}" method="post" novalidate>
+
+                    <div>
+                        <a th:href="@{/incidencias/index}" class="d-flex justify-content-center"><img
+                                th:src="@{/img/logo_RG_formularios.png}" class="img-fluid w-50" th:alt="#{crearIncidenciaForm.logoAlt}"></a>
+                    </div>
+                    <!-- Datos del creador -->
+                    <div class="mt-3">
+                        <label class="form-label fw-bold" for="input-creador" th:text="#{crearIncidenciaForm.datosIncidencia}">Datos de la Incidencia</label>
+                        <!-- id de la incidencia -->
+                        <input type="hidden" th:field="*{id}">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="select-creador" th:text="#{crearIncidenciaForm.creador}">Creador de la Incidencia</label>
+                                <select class="form-select" name="select-creador" id="select-creador" th:field="*{creador}" required>
+                                    <option class="is-invalid" value="" disabled selected th:text="#{crearIncidenciaForm.seleccioneUsuario}">Seleccione un usuario</option>
+                                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="|${usuario.nombre} ${usuario.apellido1}|"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Aula y Fecha-->
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-aula" th:text="#{crearIncidenciaForm.aula}">Aula</label>
+                                <input class="form-control" type="text" name="aula" id="input-aula" th:field="*{aula}" th:placeholder="#{crearIncidenciaForm.aulaPlaceholder}" maxlength="20" required />
+                                <div class="valid-feedback" th:text="#{crearIncidenciaForm.campoValido}">Campo válido</div>
+                                <div class="invalid-feedback" th:text="#{crearIncidenciaForm.completarAula}">Debes completar el Aula</div>
+                            </div>
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-fecha" th:text="#{crearIncidenciaForm.fecha}">Fecha</label>
+                                <input class="form-control" type="date" name="input-fecha" id="input-fecha" th:field="*{fecha}" required>
+                                <div class="valid-feedback" th:text="#{crearIncidenciaForm.campoValido}">Campo válido</div>
+                                <div class="invalid-feedback" th:text="#{crearIncidenciaForm.completarFecha}">Debes completar la fecha</div>
+                                <!-- Mostrar la fecha debajo si existe -->
+                                <div class="form-text text-muted mt-1" th:if="*{fecha != null}" th:text="|#{crearIncidenciaForm.fechaSeleccionada}: *{#temporals.format(fecha, 'dd/MM/yyyy')}|"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- titulo de la incidencia asignatura -->
+                    <div class="mt-3">
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label fw-bold" for="input-titulo" th:text="#{crearIncidenciaForm.tituloIncidencia}">Título de la Incidencia</label>
+                                <input type="text" name="input-titulo" class="form-control" th:placeholder="#{crearIncidenciaForm.tituloIncidenciaPlaceholder}" id="input-titulo" th:field="*{titulo}" maxlength="100" required>
+                                <div class="valid-feedback" th:text="#{crearIncidenciaForm.campoValido}">Campo válido</div>
+                                <div class="invalid-feedback" th:text="#{crearIncidenciaForm.completarTitulo}">Debes completar el título de la incidencia</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Descripcion -->
+                    <div class="mt-3">
+                        <label for="textarea-descripcion" class="form-label fw-bold" th:text="#{crearIncidenciaForm.descripcion}">Descripción</label>
+                        <textarea class="form-control" id="textarea-descripcion" rows="5" th:field="*{descripcion}" name="textarea-descripcion" maxlength="45000" required></textarea>
+                        <div class="valid-feedback" th:text="#{crearIncidenciaForm.campoValido}">Campo válido</div>
+                        <div class="invalid-feedback" th:text="#{crearIncidenciaForm.completarDescripcion}">Debes completar la Descripción</div>
+                    </div>
+
+                    <!-- imagen -->
+                    <div class="mt-3">
+                        <label for="formFile" class="form-label ms-3 mt-2" th:text="#{crearIncidenciaForm.imagen}">Imagen de la incidencia</label>
+                        <input class="form-control" type="text" id="imagen" name="imagen" th:field="*{imagen}" th:placeholder="#{crearIncidenciaForm.imagenPlaceholder}" maxlength="220" required>
+                        <div class="valid-feedback" th:text="#{crearIncidenciaForm.campoValido}">Campo válido</div>
+                        <div class="invalid-feedback" th:text="#{crearIncidenciaForm.completarImagen}">Debes añadir la imagen</div>
+                    </div>
+
+                    <!-- Estado de la incidencia -->
+                    <input type="hidden" th:field="*{estado}" value="PENDIENTE">
+
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button class="btn btn-outline-success" type="submit" th:text="#{crearIncidenciaForm.enviar}">Enviar<i class="bi bi-check ms-2"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{js/bs5-validation.js}"></script>
+    <script th:src="@{js/bootstrap.bundle.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+ies\ruizgijon\gestorIncidencias\controller\AdminControllerTest.class
+ies\ruizgijon\gestorIncidencias\controller\CustomErrorControllerTest.class
+ies\ruizgijon\gestorIncidencias\controller\AuthControllerTest.class
+ies\ruizgijon\gestorIncidencias\controller\UsuarioControllerTest.class
+ies\ruizgijon\gestorIncidencias\service\UsuarioServiceJpaTest.class
+ies\ruizgijon\gestorIncidencias\service\RolServiceJpaTest.class
+ies\ruizgijon\gestorIncidencias\GConstants.class
+ies\ruizgijon\gestorIncidencias\GestorIncidenciasApplicationTests.class
+ies\ruizgijon\gestorIncidencias\service\IncidenciaServiceJpaTest.class
+ies\ruizgijon\gestorIncidencias\controller\HomeControllerTest.class
+ies\ruizgijon\gestorIncidencias\controller\IncidenciasControllerTest.class
